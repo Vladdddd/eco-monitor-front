@@ -1,7 +1,7 @@
 import './style.css'
 import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
-import { logAddresses, setupCounter, logObjects, logObjectAndIndicator, logAddressAndObject } from './functions.js'
+import { logAddresses, setupCounter, logObjects, logAddress, logObject, logObjectAndIndicator, logAddressAndObject } from './functions.js'
 
 document.querySelector('#app').innerHTML = `
   <div>
@@ -24,5 +24,7 @@ document.querySelector('#app').innerHTML = `
 setupCounter(document.querySelector('#counter'))
 logAddresses();
 logObjects();
+logAddress();
+logObject();
 logObjectAndIndicator();
 logAddressAndObject();
