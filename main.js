@@ -1,30 +1,47 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { logAddresses, setupCounter, logObjects, logAddress, logObject, logObjectAndIndicator, logAddressAndObject } from './functions.js'
+import { getAddresses, getAddress, postAddress, updateAddress, deleteAddress } from './functions/Address.js'
+import { getObjects, getObject, postObject, updateObject, deleteObject } from './functions/Object.js'
+import { getIndicators, getIndicator, postIndicator, updateIndicator, deleteIndicator } from './functions/Indicator.js'
+import { getTypes, getType, postType, updateType, deleteType} from './functions/Type.js'
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+const addresses = await getAddresses();
+addresses.map(address => console.log(address.city));
+console.log("All addresses: ", addresses);
 
-setupCounter(document.querySelector('#counter'))
-logAddresses();
-logObjects();
-logAddress();
-logObject();
-logObjectAndIndicator();
-logAddressAndObject();
+for (let address of addresses) {
+	for (let objectId of address.objects) {
+		const object = await getObject(objectId);
+		console.log(object.name);
+			
+		for (let indicatorId of object.indicators) {
+			const indicator = await getIndicator(indicatorId);
+			console.log(indicator.name);
+		}
+	}
+}
+
+const dataAddress = {
+    city: "Test",
+    street: "Test",
+    longitude: "1",
+	latitude: "1",
+}
+
+const newAddress = await postAddress(dataAddress);
+console.log("New Address: ", newAddress);
+
+const updatedDataAddress = {
+    city: "Updated Test",
+    street: "Updated Test",
+    longitude: "2",
+	latitude: "2",
+}
+
+const updatedAddress = await updateAddress(updatedDataAddress, newAddress._id);
+console.log("Updated New Address:", updatedAddress);
+
+const isDeleted = await deleteAddress(newAddress._id);
+console.log(isDeleted);
+
+const deletedAddress = await getAddress(newAddress._id);
+console.log("Deleted Address (must be null): ", deletedAddress);
